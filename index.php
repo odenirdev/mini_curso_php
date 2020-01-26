@@ -15,28 +15,28 @@
             flex-direction: column;
             margin: 0 auto;
         }
-        
+
         form div {
             display: flex;
             width: 100%;
             margin: 1%;
         }
-        
+
         form label {
             font-size: x-large;
             width: 30%;
         }
-        
+
         form input {
             font-size: x-large;
             width: 68%;
         }
-        
+
         form input[type=submit] {
             font-size: large;
             width: 30%;
         }
-        
+
         table,
         th,
         td {
@@ -49,33 +49,34 @@
     </style>
 
     <?php
-        session_start();
-
-        require_once "model/bancoDeDados.php";
-        require_once "model/pessoa.php";
-
-        $pessoa = new pessoa();
-        $pessoas = $pessoa->buscarTodasPessoas();
-    ?>
+require_once "controller/pessoa.php";
+?>
 </head>
 
 <body>
     <section>
-        <form action="controller/pessoa.php" method="POST">
+        <p><?=$_SESSION['mensagem']?></p>
+    </section>
+    <section>
+        <form>
+            <input name="id" id="id" type="hidden" value="<?=$id?>">
             <div>
                 <label for="nome">Nome:</label>
-                <input name="nome" id="nome" type="text">
+                <input name="nome" id="nome" type="text" value="<?=$nome?>">
             </div>
             <div>
                 <label for="sobrenome">Sobrenome:</label>
-                <input name="sobrenome" id="sobrenome" type="text">
+                <input name="sobrenome" id="sobrenome" type="text" value="<?=$sobrenome?>">
             </div>
             <div>
-                <input type="submit" value="Cadastrar">
+                <?php if (empty($id)): ?>
+                    <button name="cadastrar">Cadastrar</button>
+                <?php else: ?>
+                    <button name="alterar">Alterar</button>
+                <?php endif; ?>
             </div>
         </form>
     </section>
-    <?php if (!empty($pessoas['dados'])):?>
     <section>
         <table>
             <thead>
@@ -83,20 +84,29 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Sobrenome</th>
+                    <th>Visualizar</th>
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($pessoas['dados'] as $p):?>
-                <tr>
-                    <th><?= $p['id'] ?></th>
-                    <th><?= $p['nome'] ?></th>
-                    <th><?= $p['sobrenome'] ?></th>
-                </tr>
-            <?php endforeach; ?>
+                <?php
+                    $pessoas = $pessoa->buscarTodasPessoas();
+                    foreach ($pessoas['dados'] as $p): ?>
+                    <tr>
+                        <th>
+                            <?=$p['id']?>
+                        </th>
+                        <th>
+                            <?=$p['nome']?>
+                        </th>
+                        <th>
+                            <?=$p['sobrenome']?>
+                        </th>
+                            <th><button name="visualizar" value="<?=$p['id']?>">(X)</button></th>
+                    </tr>
+                <?php endforeach;?>
             </tbody>
         </table>
     </section>
-    <?php endif; ?>
 </body>
 
 </html>

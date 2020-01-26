@@ -44,27 +44,44 @@ class bancoDeDados
         return $retorno;
     }
 
-    public function buscar($tabela, $colunas = '*', $where = []) {
-        $retorno = [];
+    private function setWhereString($arrayWhere, $sql)
+    {
         $strWhere = '';
-        $conexao = $this->conectar();
-
-        $sql = "SELECT $colunas FROM $tabela ";
-
-        if (!empty($where)) {
-            foreach ($where as $c => $v) {
-                if (empty($strWhere)){
-                    $strWhere = "WHERE $c = '$v'";
+        if (is_array($arrayWhere) and !empty($arrayWhere)) {
+            foreach ($arrayWhere as $c => $v){
+                if (empty($strWhere)) {
+                    $strWhere = " WHERE $c = '$v'";
                 } else {
-                    $strWhere .= "AND $c = '$v'";
+                    $strWhere .= " AND $c = '$v'";
                 }
             }
             $sql .= $strWhere;
         }
+        return $sql;
+    }
 
+    public function buscar($tabela, $colunas = '*', $where = [])
+    {
+        $retorno = [];
+        $conexao = $this->conectar();
+        $sql = $this->setWhereString($where, "SELECT $colunas FROM $tabela");
         try {
             $retorno['status'] = true;
             $retorno['dados'] = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $retorno['status'] = false;
+        }
+        return $retorno;
+    }
+
+    public function buscarUm($tabela, $colunas = '*', $where = [])
+    {
+        $retorno = [];
+        $conexao = $this->conectar();
+        $sql = $this->setWhereString($where, "SELECT $colunas FROM $tabela");
+        try {
+            $retorno['status'] = true;
+            $retorno['dados'] = $conexao->query($sql)->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             $retorno['status'] = false;
         }
@@ -77,7 +94,7 @@ class bancoDeDados
         $valores = '';
         foreach ($dados as $c => $v) {
             if (empty($colunas)) {
-                $colunas =  "($c";
+                $colunas = "($c";
             } else {
                 $colunas .= ", $c";
             }
