@@ -59,20 +59,28 @@ require_once "controller/pessoa.php";
     </section>
     <section>
         <form>
-            <input name="id" id="id" type="hidden" value="<?=$id?>">
+            <?php if (!empty($id)):?>
+            <div>
+                <label for="id">ID:</label>
+                <input name="id" id="id" type="number" value="<?=$id?>">
+            </div>
+            <?php endif; ?>
             <div>
                 <label for="nome">Nome:</label>
-                <input name="nome" id="nome" type="text" value="<?=$nome?>">
+                <input require name="nome" id="nome" type="text" value="<?php if (!empty($nome)) { echo $nome; } ?>">
             </div>
             <div>
                 <label for="sobrenome">Sobrenome:</label>
-                <input name="sobrenome" id="sobrenome" type="text" value="<?=$sobrenome?>">
+                <input name="sobrenome" id="sobrenome" type="text" value="<?php if (!empty($sobrenome)) { echo $sobrenome; } ?>">
             </div>
             <div>
-                <?php if (empty($id)): ?>
+                <?php 
+                if (empty($id)): ?>
                     <button name="cadastrar">Cadastrar</button>
                 <?php else: ?>
                     <button name="alterar">Alterar</button>
+                    <button name="deletar">Deletar</button>
+                    <button name="limpar">Limpar</button>
                 <?php endif; ?>
             </div>
         </form>
@@ -101,7 +109,12 @@ require_once "controller/pessoa.php";
                         <th>
                             <?=$p['sobrenome']?>
                         </th>
-                            <th><button name="visualizar" value="<?=$p['id']?>">(X)</button></th>
+
+                        <th>
+                            <form>
+                                <button name="visualizar" value="<?=$p['id']?>">(X)</button>
+                            </form>
+                        </th>
                     </tr>
                 <?php endforeach;?>
             </tbody>

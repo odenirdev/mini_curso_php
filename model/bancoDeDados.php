@@ -44,11 +44,15 @@ class bancoDeDados
         return $retorno;
     }
 
-    private function setWhereString($arrayWhere, $sql)
+    public function buscar($tabela, $colunas = '*', $where = [])
     {
-        $strWhere = '';
-        if (is_array($arrayWhere) and !empty($arrayWhere)) {
-            foreach ($arrayWhere as $c => $v){
+        $retorno = [];
+        $conexao = $this->conectar();
+        $sql = "SELECT $colunas FROM $tabela";
+
+        if (is_array($where) and !empty($where)) {
+            $strWhere = '';
+            foreach ($where as $c => $v){
                 if (empty($strWhere)) {
                     $strWhere = " WHERE $c = '$v'";
                 } else {
@@ -57,17 +61,10 @@ class bancoDeDados
             }
             $sql .= $strWhere;
         }
-        return $sql;
-    }
 
-    public function buscar($tabela, $colunas = '*', $where = [])
-    {
-        $retorno = [];
-        $conexao = $this->conectar();
-        $sql = $this->setWhereString($where, "SELECT $colunas FROM $tabela");
         try {
             $retorno['status'] = true;
-            $retorno['dados'] = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+            $retorno['dados'] = $this->conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             $retorno['status'] = false;
         }
@@ -78,7 +75,21 @@ class bancoDeDados
     {
         $retorno = [];
         $conexao = $this->conectar();
-        $sql = $this->setWhereString($where, "SELECT $colunas FROM $tabela");
+
+        $sql = "SELECT $colunas FROM $tabela";
+        
+        if (is_array($where) and !empty($where)) {
+            $strWhere = '';
+            foreach ($where as $c => $v) {
+                if (empty($strWhere)) {
+                    $strWhere = " WHERE $c = '$v'";
+                } else {
+                    $strWhere .= " AND $c = '$v'";
+                }
+            }
+            $sql .= $strWhere;
+        }
+
         try {
             $retorno['status'] = true;
             $retorno['dados'] = $conexao->query($sql)->fetch(PDO::FETCH_ASSOC);
@@ -109,6 +120,37 @@ class bancoDeDados
         $valores .= ')';
 
         $sql = 'INSERT INTO ' . $tabela . $colunas . ' VALUES ' . $valores;
+
+        $retorno = $this->comando($sql);
+        return $retorno;
+    }
+
+    public function atualizar($tabela, $dados, $where) {
+        $sql = "UPDATE $tabela";
+
+        if (is_array($dados) and !empty($dados)) {
+            $strSet = '';
+            foreach ($dados as $c => $v) {
+                if (empty($strSet)) {
+                    $strSet = " SET $c = '$v'";
+                } else {
+                    $strSet .= ", $c = '$v'";
+                }
+            }
+            $sql .= $strSet;
+        }
+
+        if (is_array($where) and !empty($where)) {
+            $strWhere = '';
+            foreach ($where as $c => $v) {
+                if (empty($strWhere)) {
+                    $strWhere = " WHERE $c = '$v'";
+                } else {
+                    $strWhere .= " AND $c = '$v'";
+                }
+            }
+            $sql .= $strWhere;
+        }
 
         $retorno = $this->comando($sql);
         return $retorno;
