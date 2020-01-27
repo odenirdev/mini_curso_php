@@ -6,59 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mini curso PHP</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
-    <style>
-        form {
-            background-color: red;
-            width: 430px;
-            display: flex;
-            flex-direction: column;
-            margin: 0 auto;
-        }
-
-        form div {
-            display: flex;
-            width: 100%;
-            margin: 1%;
-        }
-
-        form label {
-            font-size: x-large;
-            width: 30%;
-        }
-
-        form input {
-            font-size: x-large;
-            width: 68%;
-        }
-
-        form input[type=submit] {
-            font-size: large;
-            width: 30%;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-    </style>
-
-    <?php
-require_once "controller/pessoa.php";
-?>
+    <?php require_once "controller/pessoa.php"; ?>
 </head>
 
 <body>
     <section>
-        <p><?=$_SESSION['mensagem']?></p>
+        <p>
+            <?=$_SESSION['mensagem']?>
+        </p>
     </section>
     <section>
-        <form>
+        <form class="controle">
             <?php if (!empty($id)):?>
             <div>
                 <label for="id">ID:</label>
@@ -76,11 +37,11 @@ require_once "controller/pessoa.php";
             <div>
                 <?php 
                 if (empty($id)): ?>
-                    <button name="cadastrar">Cadastrar</button>
+                <button name="cadastrar">Cadastrar</button>
                 <?php else: ?>
-                    <button name="alterar">Alterar</button>
-                    <button name="deletar">Deletar</button>
-                    <button name="limpar">Limpar</button>
+                <button name="alterar">Alterar</button>
+                <button name="deletar">Deletar</button>
+                <button name="limpar">Limpar</button>
                 <?php endif; ?>
             </div>
         </form>
@@ -116,7 +77,7 @@ require_once "controller/pessoa.php";
                             </form>
                         </th>
                     </tr>
-                <?php endforeach;?>
+                    <?php endforeach;?>
             </tbody>
         </table>
     </section>

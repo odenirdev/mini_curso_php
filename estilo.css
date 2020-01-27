@@ -1,0 +1,51 @@
+body {
+    font-family: Roboto;
+    background-color: #f8f8f8;
+}
+
+.controle {
+    background-color: #ffffff;
+    border: 3px solid #dfdfdf;
+    box-shadow: 2px 2px 10px black;
+    border-radius: 1%;
+    width: 430px;
+    margin: 0 auto;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.controle label {
+    font-size: large;
+    width: 35%;
+}
+
+.controle div {
+    margin: 1% 0;
+    width: 80%;
+}
+
+.controle input {
+    font-size: large;
+    float: right;
+    width: 70%;
+}
+
+form input[type=submit] {
+    font-size: large;
+    width: 30%;
+}
+
+.controle button {
+    padding: 2%;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+}
