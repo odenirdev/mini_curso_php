@@ -13,17 +13,20 @@
 </head>
 
 <body>
-    <section>
+
+    <?php if (!empty($_SESSION['mensagem'])): ?>
+    <section class="mensagens" style="background-color: <?= $_SESSION['mensagem_cor']; ?>">
         <p>
             <?=$_SESSION['mensagem']?>
         </p>
     </section>
-    <section>
-        <form class="controle">
+    <?php endif; ?>
+    <section class="controle">
+        <form>
             <?php if (!empty($id)):?>
             <div>
                 <label for="id">ID:</label>
-                <input name="id" id="id" type="number" value="<?=$id?>">
+                <input readonly name="id" id="id" type="number" value="<?=$id?>">
             </div>
             <?php endif; ?>
             <div>
@@ -46,6 +49,10 @@
             </div>
         </form>
     </section>
+    <?php
+        $pessoas = $pessoa->buscarTodasPessoas();
+        if (!empty($pessoas['dados'])):
+    ?>
     <section>
         <table>
             <thead>
@@ -53,34 +60,34 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Sobrenome</th>
-                    <th>Visualizar</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                    $pessoas = $pessoa->buscarTodasPessoas();
                     foreach ($pessoas['dados'] as $p): ?>
                     <tr>
-                        <th>
+                        <td>
                             <?=$p['id']?>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <?=$p['nome']?>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <?=$p['sobrenome']?>
-                        </th>
+                        </td>
 
-                        <th>
+                        <td>
                             <form>
-                                <button name="visualizar" value="<?=$p['id']?>">(X)</button>
+                                <button name="visualizar" value="<?=$p['id']?>">Visualizar</button>
                             </form>
-                        </th>
+                        </td>
                     </tr>
                     <?php endforeach;?>
             </tbody>
         </table>
     </section>
+    <?php endif; ?>
 </body>
 
 </html>

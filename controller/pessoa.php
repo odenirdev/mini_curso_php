@@ -9,6 +9,11 @@ $pessoa = new pessoa();
 if (isset($_REQUEST['cadastrar'])) {
     $retorno = $pessoa->cadastrarPessoa(['nome' => $_REQUEST['nome'], 'sobrenome' => $_REQUEST['sobrenome']]);
     $_SESSION['mensagem'] = $retorno['mensagem'];
+    if ($retorno['status']){
+        $_SESSION['mensagem_cor'] = '#8bc34a';
+    } else {
+        $_SESSION['mensagem_cor'] = '#f44336';
+    }
     header('Location: /mini_curso_php');
 }
 
@@ -27,11 +32,13 @@ if (isset($_REQUEST['limpar'])) {
 if (isset($_REQUEST['deletar'])) {
     $retorno = $pessoa->deletarPessoa(['status' => 0], $_REQUEST['id']);
     $_SESSION['mensagem'] = $retorno['mensagem'];
+    $_SESSION['mensagem_cor'] = '#f44336';
     header('Location: /mini_curso_php');
 }
 
 if (isset($_REQUEST['alterar'])) {
     $retorno = $pessoa->atualizarPessoa(['nome' => $_REQUEST['nome'], 'sobrenome' => $_REQUEST['sobrenome']], $_REQUEST['id']);
     $_SESSION['mensagem'] = $retorno['mensagem'];
+    $_SESSION['mensagem_cor'] = '#ffeb3b';
     header('Location: /mini_curso_php');
 }
